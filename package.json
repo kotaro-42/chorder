@@ -1,0 +1,13 @@
+{
+  "name": "chorder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "24-chord RNBO web player",
+  "scripts": {
+    "dev": "serve .",
+    "start": "serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

@@ -1947,7 +1947,8 @@ void param_01_value_set(number v) {
         this->param_01_lastValue = this->param_01_value;
     }
 
-    this->message_01_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_01_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_02_value_set(number v) {
@@ -1963,7 +1964,8 @@ void param_02_value_set(number v) {
         this->param_02_lastValue = this->param_02_value;
     }
 
-    this->message_02_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_02_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_03_value_set(number v) {
@@ -1979,7 +1981,8 @@ void param_03_value_set(number v) {
         this->param_03_lastValue = this->param_03_value;
     }
 
-    this->message_03_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_03_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_04_value_set(number v) {
@@ -1995,7 +1998,8 @@ void param_04_value_set(number v) {
         this->param_04_lastValue = this->param_04_value;
     }
 
-    this->message_04_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_04_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_05_value_set(number v) {
@@ -2011,7 +2015,8 @@ void param_05_value_set(number v) {
         this->param_05_lastValue = this->param_05_value;
     }
 
-    this->message_05_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_05_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_06_value_set(number v) {
@@ -2027,7 +2032,8 @@ void param_06_value_set(number v) {
         this->param_06_lastValue = this->param_06_value;
     }
 
-    this->message_06_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_06_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_07_value_set(number v) {
@@ -2043,7 +2049,8 @@ void param_07_value_set(number v) {
         this->param_07_lastValue = this->param_07_value;
     }
 
-    this->message_07_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_07_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_08_value_set(number v) {
@@ -2059,7 +2066,8 @@ void param_08_value_set(number v) {
         this->param_08_lastValue = this->param_08_value;
     }
 
-    this->message_08_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_08_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_09_value_set(number v) {
@@ -2075,7 +2083,8 @@ void param_09_value_set(number v) {
         this->param_09_lastValue = this->param_09_value;
     }
 
-    this->message_09_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_09_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_10_value_set(number v) {
@@ -2091,7 +2100,8 @@ void param_10_value_set(number v) {
         this->param_10_lastValue = this->param_10_value;
     }
 
-    this->message_10_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_10_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_11_value_set(number v) {
@@ -2107,7 +2117,8 @@ void param_11_value_set(number v) {
         this->param_11_lastValue = this->param_11_value;
     }
 
-    this->message_11_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_11_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_12_value_set(number v) {
@@ -2123,7 +2134,8 @@ void param_12_value_set(number v) {
         this->param_12_lastValue = this->param_12_value;
     }
 
-    this->message_12_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_12_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_13_value_set(number v) {
@@ -2139,7 +2151,8 @@ void param_13_value_set(number v) {
         this->param_13_lastValue = this->param_13_value;
     }
 
-    this->message_13_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_13_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_14_value_set(number v) {
@@ -2155,7 +2168,8 @@ void param_14_value_set(number v) {
         this->param_14_lastValue = this->param_14_value;
     }
 
-    this->message_14_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_14_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_15_value_set(number v) {
@@ -2171,7 +2185,8 @@ void param_15_value_set(number v) {
         this->param_15_lastValue = this->param_15_value;
     }
 
-    this->message_15_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_15_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_16_value_set(number v) {
@@ -2187,7 +2202,8 @@ void param_16_value_set(number v) {
         this->param_16_lastValue = this->param_16_value;
     }
 
-    this->message_16_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_16_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_17_value_set(number v) {
@@ -2203,7 +2219,8 @@ void param_17_value_set(number v) {
         this->param_17_lastValue = this->param_17_value;
     }
 
-    this->message_17_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_17_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_18_value_set(number v) {
@@ -2219,7 +2236,8 @@ void param_18_value_set(number v) {
         this->param_18_lastValue = this->param_18_value;
     }
 
-    this->message_18_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_18_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_19_value_set(number v) {
@@ -2235,7 +2253,8 @@ void param_19_value_set(number v) {
         this->param_19_lastValue = this->param_19_value;
     }
 
-    this->message_20_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_19_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_20_value_set(number v) {
@@ -2251,7 +2270,8 @@ void param_20_value_set(number v) {
         this->param_20_lastValue = this->param_20_value;
     }
 
-    this->message_19_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_20_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_21_value_set(number v) {
@@ -2267,7 +2287,8 @@ void param_21_value_set(number v) {
         this->param_21_lastValue = this->param_21_value;
     }
 
-    this->message_21_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_21_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_22_value_set(number v) {
@@ -2283,7 +2304,8 @@ void param_22_value_set(number v) {
         this->param_22_lastValue = this->param_22_value;
     }
 
-    this->message_22_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_22_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_23_value_set(number v) {
@@ -2299,7 +2321,8 @@ void param_23_value_set(number v) {
         this->param_23_lastValue = this->param_23_value;
     }
 
-    this->message_23_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_23_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 void param_24_value_set(number v) {
@@ -2315,7 +2338,8 @@ void param_24_value_set(number v) {
         this->param_24_lastValue = this->param_24_value;
     }
 
-    this->message_24_trigger_bang();
+    if (v > 0) { this->muteActive = false; this->message_24_trigger_bang(); }
+    else { this->muteActive = true; }
 }
 
 MillisecondTime getPatcherTime() const {
@@ -3637,9 +3661,10 @@ void signaladder_01_perform(
 void dspexpr_01_perform(const Sample * in1, number in2, SampleValue * out1, Index n) {
     RNBO_UNUSED(in2);
     Index i;
+    const number gain = this->muteActive ? 0.0 : 0.1;
 
     for (i = 0; i < (Index)n; i++) {
-        out1[(Index)i] = in1[(Index)i] * 0.1;//#map:_###_obj_###_:1
+        out1[(Index)i] = in1[(Index)i] * gain;//#map:_###_obj_###_:1
     }
 }
 
@@ -3662,7 +3687,7 @@ void param_01_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_01_init() {
-    this->message_01_set_set(listbase<number, 3>{1, 5, 8});
+    this->message_01_set_set(listbase<number, 3>{1, 5, 8}); // C major
 }
 
 void param_02_getPresetValue(PatcherStateInterface& preset) {
@@ -3677,7 +3702,7 @@ void param_02_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_02_init() {
-    this->message_02_set_set(listbase<number, 3>{1, 5, 10});
+    this->message_02_set_set(listbase<number, 3>{1, 4, 8}); // C minor
 }
 
 void param_03_getPresetValue(PatcherStateInterface& preset) {
@@ -3707,7 +3732,7 @@ void param_04_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_04_init() {
-    this->message_04_set_set(listbase<number, 3>{2, 6, 11});
+    this->message_04_set_set(listbase<number, 3>{2, 5, 9}); // D♭ minor
 }
 
 void param_05_getPresetValue(PatcherStateInterface& preset) {
@@ -3737,7 +3762,7 @@ void param_06_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_06_init() {
-    this->message_06_set_set(listbase<number, 3>{3, 7, 12});
+    this->message_06_set_set(listbase<number, 3>{3, 6, 10}); // D minor
 }
 
 void param_07_getPresetValue(PatcherStateInterface& preset) {
@@ -3767,7 +3792,7 @@ void param_08_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_08_init() {
-    this->message_08_set_set(listbase<number, 3>{1, 4, 8});
+    this->message_08_set_set(listbase<number, 3>{4, 7, 11}); // E♭ minor
 }
 
 void param_09_getPresetValue(PatcherStateInterface& preset) {
@@ -3782,7 +3807,7 @@ void param_09_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_09_init() {
-    this->message_09_set_set(listbase<number, 3>{5, 9, 12});
+    this->message_09_set_set(listbase<number, 3>{5, 9, 12}); // E major
 }
 
 void param_10_getPresetValue(PatcherStateInterface& preset) {
@@ -3797,7 +3822,7 @@ void param_10_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_10_init() {
-    this->message_10_set_set(listbase<number, 3>{2, 5, 9});
+    this->message_10_set_set(listbase<number, 3>{5, 8, 12}); // E minor
 }
 
 void param_11_getPresetValue(PatcherStateInterface& preset) {
@@ -3812,7 +3837,7 @@ void param_11_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_11_init() {
-    this->message_11_set_set(listbase<number, 3>{1, 6, 10});
+    this->message_11_set_set(listbase<number, 3>{6, 10, 1}); // F major
 }
 
 void param_12_getPresetValue(PatcherStateInterface& preset) {
@@ -3827,7 +3852,7 @@ void param_12_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_12_init() {
-    this->message_12_set_set(listbase<number, 3>{3, 6, 10});
+    this->message_12_set_set(listbase<number, 3>{6, 9, 1}); // F minor
 }
 
 number cycle_tilde_01_ph_next(number freq, number reset) {
@@ -4702,7 +4727,7 @@ void param_13_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_13_init() {
-    this->message_13_set_set(listbase<number, 3>{2, 7, 11});
+    this->message_13_set_set(listbase<number, 3>{7, 11, 2}); // G♭ major
 }
 
 void param_14_getPresetValue(PatcherStateInterface& preset) {
@@ -4717,7 +4742,7 @@ void param_14_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_14_init() {
-    this->message_14_set_set(listbase<number, 3>{4, 7, 11});
+    this->message_14_set_set(listbase<number, 3>{7, 10, 2}); // G♭ minor
 }
 
 number cycle_tilde_03_ph_next(number freq, number reset) {
@@ -5162,7 +5187,7 @@ void param_15_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_15_init() {
-    this->message_15_set_set(listbase<number, 3>{3, 8, 12});
+    this->message_15_set_set(listbase<number, 3>{8, 12, 3}); // G major
 }
 
 void param_16_getPresetValue(PatcherStateInterface& preset) {
@@ -5177,7 +5202,7 @@ void param_16_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_16_init() {
-    this->message_16_set_set(listbase<number, 3>{5, 8, 12});
+    this->message_16_set_set(listbase<number, 3>{8, 11, 3}); // G minor
 }
 
 void param_17_getPresetValue(PatcherStateInterface& preset) {
@@ -5192,7 +5217,7 @@ void param_17_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_17_init() {
-    this->message_17_set_set(listbase<number, 3>{1, 4, 9});
+    this->message_17_set_set(listbase<number, 3>{9, 1, 4}); // A♭ major
 }
 
 void param_18_getPresetValue(PatcherStateInterface& preset) {
@@ -5207,11 +5232,11 @@ void param_18_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_18_init() {
-    this->message_18_set_set(listbase<number, 3>{1, 6, 9});
+    this->message_18_set_set(listbase<number, 3>{9, 12, 4}); // A♭ minor
 }
 
 void message_19_init() {
-    this->message_19_set_set(listbase<number, 3>{2, 7, 10});
+    this->message_19_set_set(listbase<number, 3>{10, 2, 5}); // A major
 }
 
 void param_19_getPresetValue(PatcherStateInterface& preset) {
@@ -5226,7 +5251,7 @@ void param_19_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_20_init() {
-    this->message_20_set_set(listbase<number, 3>{2, 5, 10});
+    this->message_20_set_set(listbase<number, 3>{10, 1, 5}); // A minor
 }
 
 void param_20_getPresetValue(PatcherStateInterface& preset) {
@@ -5252,7 +5277,7 @@ void param_21_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_21_init() {
-    this->message_21_set_set(listbase<number, 3>{3, 6, 11});
+    this->message_21_set_set(listbase<number, 3>{11, 3, 6}); // B♭ major
 }
 
 void param_22_getPresetValue(PatcherStateInterface& preset) {
@@ -5267,7 +5292,7 @@ void param_22_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_22_init() {
-    this->message_22_set_set(listbase<number, 3>{3, 8, 11});
+    this->message_22_set_set(listbase<number, 3>{11, 2, 6}); // B♭ minor
 }
 
 void param_23_getPresetValue(PatcherStateInterface& preset) {
@@ -5282,7 +5307,7 @@ void param_23_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_23_init() {
-    this->message_23_set_set(listbase<number, 3>{4, 7, 12});
+    this->message_23_set_set(listbase<number, 3>{12, 4, 7}); // B major
 }
 
 void param_24_getPresetValue(PatcherStateInterface& preset) {
@@ -5297,7 +5322,7 @@ void param_24_setPresetValue(PatcherStateInterface& preset) {
 }
 
 void message_24_init() {
-    this->message_24_set_set(listbase<number, 3>{4, 9, 12});
+    this->message_24_set_set(listbase<number, 3>{12, 3, 7}); // B minor
 }
 
 void globaltransport_advance() {}
@@ -5359,6 +5384,7 @@ void updateTime(MillisecondTime time, EXTERNALENGINE* engine, bool inProcess = f
 
 void assign_defaults()
 {
+    muteActive = true;
     param_01_value = 0;
     param_02_value = 0;
     param_03_value = 0;
@@ -5533,6 +5559,7 @@ void assign_defaults()
 
 // member variables
 
+    bool muteActive;
     number param_01_value;
     list message_01_set;
     number param_02_value;

@@ -91,7 +91,7 @@
 
   .col-headers {
     display: grid;
-    grid-template-columns: 56px 1fr 1fr;
+    grid-template-columns: 28px 1fr 1fr;
     gap: 8px;
     margin-bottom: 6px;
     padding: 0 2px;
@@ -108,18 +108,18 @@
 
   .chord-row {
     display: grid;
-    grid-template-columns: 56px 1fr 1fr;
+    grid-template-columns: 28px 1fr 1fr;
     gap: 8px;
     margin-bottom: 7px;
+    align-items: center;
   }
 
-  .key-label {
-    display: flex;
-    align-items: center;
-    font-size: .9rem;
+  .key-num {
+    text-align: center;
+    font-size: .85rem;
     font-weight: 700;
     color: #666688;
-    padding-left: 4px;
+    font-family: ui-monospace, monospace;
   }
 
   /* ---- Chord button ---- */
@@ -131,12 +131,14 @@
     font-size: .9rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .08s, filter .08s;
+    transition: transform .06s;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    touch-action: none;  /* pointer events を確実に受け取る */
   }
-  .chord-btn:active { transform: scale(.95); }
+  .chord-btn:active,
+  .chord-btn.on { transform: scale(.95); }
   .chord-btn:disabled { opacity: .35; cursor: default; }
 
   /* Major */
@@ -152,7 +154,7 @@
 
   @media (max-width: 400px) {
     .chord-btn { font-size: .78rem; padding: 9px 2px; }
-    .key-label { font-size: .78rem; }
+    .key-num { font-size: .75rem; }
   }
 </style>
 </head>
@@ -160,19 +162,8 @@
 
 <header>⬡ &nbsp; C H O R D E R &nbsp; ⬡</header>
 
-<p id="status">パッチ未読み込み</p>
-
-<!-- Setup / load panel -->
-<div id="setup">
-  <p>
-    Maxで <code>rnbo~</code> パッチを開き、<br>
-    <strong>Export → Web Export</strong> を実行して<br>
-    生成された <code>patch.export.json</code> を読み込んでください。<br><br>
-    ファイルを選択するか、ここにドロップしてください。
-  </p>
-  <label id="loadBtn" for="fileInput">📂 &nbsp;パッチを読み込む</label>
-  <input type="file" id="fileInput" accept=".json">
-</div>
+<p id="status"></p>
+<div id="setup" class="hidden" aria-hidden="true"></div>
 
 <!-- Chord grid -->
 <div class="grid-wrap">
@@ -184,66 +175,153 @@
   <div id="grid"></div>
 </div>
 
-<!-- RNBO JS library -->
-<script src="https://cdn.cycling74.com/rnbo/latest/rnbo.min.js"></script>
-
 <script>
 // -------------------------------------------------------
 // Chord data — parallel to RNBO parameter indices 0..23
 // -------------------------------------------------------
-const CHORDS = [
-  { key: "C",  majId: "CM",  minId: "Cm",  majLabel: "C",  minLabel: "Cm"  },
-  { key: "D♭", majId: "DfM", minId: "Dfm", majLabel: "D♭", minLabel: "D♭m" },
-  { key: "D",  majId: "DM",  minId: "Dm",  majLabel: "D",  minLabel: "Dm"  },
-  { key: "E♭", majId: "EfM", minId: "Efm", majLabel: "E♭", minLabel: "E♭m" },
-  { key: "E",  majId: "EM",  minId: "Em",  majLabel: "E",  minLabel: "Em"  },
-  { key: "F",  majId: "FM",  minId: "Fm",  majLabel: "F",  minLabel: "Fm"  },
-  { key: "G♭", majId: "GfM", minId: "Gfm", majLabel: "G♭", minLabel: "G♭m" },
-  { key: "G",  majId: "GM",  minId: "Gm",  majLabel: "G",  minLabel: "Gm"  },
-  { key: "A♭", majId: "AfM", minId: "Afm", majLabel: "A♭", minLabel: "A♭m" },
-  { key: "A",  majId: "AM",  minId: "Am",  majLabel: "A",  minLabel: "Am"  },
-  { key: "B♭", majId: "BfM", minId: "Bfm", majLabel: "B♭", minLabel: "B♭m" },
-  { key: "B",  majId: "BM",  minId: "Bm",  majLabel: "B",  minLabel: "Bm"  },
+// キー: Major 1–0 - =  /  minor Shift+同キー (! … +)
+const MAJ_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+const MIN_KEYS = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
+
+// RNBO パラメータ index 0..23 に対応する正しい MIDI 音（3和音）
+// rnbo_source.cpp の message_XX_init と同期
+const PARAM_MIDI = [
+  [60, 64, 67], // 0  CM  C major
+  [60, 63, 67], // 1  Cm  C minor
+  [61, 65, 68], // 2  DfM D♭ major
+  [61, 64, 68], // 3  Dfm D♭ minor
+  [62, 66, 69], // 4  DM  D major
+  [62, 65, 69], // 5  Dm  D minor
+  [63, 67, 70], // 6  EfM E♭ major
+  [63, 66, 70], // 7  Efm E♭ minor
+  [64, 68, 71], // 8  EM  E major
+  [64, 67, 71], // 9  Em  E minor
+  [65, 69, 72], // 10 FM  F major
+  [65, 68, 72], // 11 Fm  F minor
+  [66, 70, 73], // 12 GfM G♭ major
+  [66, 69, 73], // 13 Gfm G♭ minor
+  [67, 71, 74], // 14 GM  G major
+  [67, 70, 74], // 15 Gm  G minor
+  [68, 72, 75], // 16 AfM A♭ major
+  [68, 71, 75], // 17 Afm A♭ minor
+  [69, 73, 76], // 18 AM  A major
+  [69, 72, 76], // 19 Am  A minor
+  [70, 74, 77], // 20 BfM B♭ major
+  [70, 73, 77], // 21 Bfm B♭ minor
+  [71, 75, 78], // 22 BM  B major
+  [71, 74, 78], // 23 Bm  B minor
 ];
+
+const CHORDS = [
+  { key: "C",  majIndex: 0,  minIndex: 1,  majLabel: "C",  minLabel: "Cm",  majKey: "1", minKey: "!" },
+  { key: "D♭", majIndex: 2,  minIndex: 3,  majLabel: "D♭", minLabel: "D♭m", majKey: "2", minKey: "@" },
+  { key: "D",  majIndex: 4,  minIndex: 5,  majLabel: "D",  minLabel: "Dm",  majKey: "3", minKey: "#" },
+  { key: "E♭", majIndex: 6,  minIndex: 7,  majLabel: "E♭", minLabel: "E♭m", majKey: "4", minKey: "$" },
+  { key: "E",  majIndex: 8,  minIndex: 9,  majLabel: "E",  minLabel: "Em",  majKey: "5", minKey: "%" },
+  { key: "F",  majIndex: 10, minIndex: 11, majLabel: "F",  minLabel: "Fm",  majKey: "6", minKey: "^" },
+  { key: "G♭", majIndex: 12, minIndex: 13, majLabel: "G♭", minLabel: "G♭m", majKey: "7", minKey: "&" },
+  { key: "G",  majIndex: 14, minIndex: 15, majLabel: "G",  minLabel: "Gm",  majKey: "8", minKey: "*" },
+  { key: "A♭", majIndex: 16, minIndex: 17, majLabel: "A♭", minLabel: "A♭m", majKey: "9", minKey: "(" },
+  { key: "A",  majIndex: 18, minIndex: 19, majLabel: "A",  minLabel: "Am",  majKey: "0", minKey: ")" },
+  { key: "B♭", majIndex: 20, minIndex: 21, majLabel: "B♭", minLabel: "B♭m", majKey: "-", minKey: "_" },
+  { key: "B",  majIndex: 22, minIndex: 23, majLabel: "B",  minLabel: "Bm",  majKey: "=", minKey: "+" },
+];
+
+const majKeyIndex = new Map(MAJ_KEYS.map((k, i) => [k, i]));
+const minKeyIndex = new Map(MIN_KEYS.map((k, i) => [k, i]));
 
 // -------------------------------------------------------
 // Build button grid
 // -------------------------------------------------------
 const grid = document.getElementById("grid");
-const btnMap = {}; // paramId -> <button>
+const btnMap = {}; // paramIndex -> <button>
 
-CHORDS.forEach(({ key, majId, minId, majLabel, minLabel }) => {
+CHORDS.forEach(({ majIndex, minIndex, majLabel, minLabel, majKey }) => {
   const row = document.createElement("div");
   row.className = "chord-row";
 
-  const label = document.createElement("div");
-  label.className = "key-label";
-  label.textContent = key;
+  const keyNum = document.createElement("span");
+  keyNum.className = "key-num";
+  keyNum.textContent = majKey;
 
-  const makBtn = (id, cssClass, text) => {
+  const makBtn = (paramIndex, cssClass, text) => {
     const b = document.createElement("button");
     b.className = `chord-btn ${cssClass}`;
     b.textContent = text;
-    b.disabled = true;
-    b.dataset.paramId = id;
-    b.addEventListener("click", () => onChordClick(id, b));
-    btnMap[id] = b;
+    b.dataset.paramIndex = String(paramIndex);
+
+    b.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      resumeAudioIfNeeded();
+      startChord(paramIndex);
+    });
+
+    btnMap[paramIndex] = b;
     return b;
   };
 
-  row.appendChild(label);
-  row.appendChild(makBtn(majId, "maj", majLabel));
-  row.appendChild(makBtn(minId, "min", minLabel));
+  row.appendChild(keyNum);
+  row.appendChild(makBtn(majIndex, "maj", majLabel));
+  row.appendChild(makBtn(minIndex, "min", minLabel));
   grid.appendChild(row);
 });
 
 // -------------------------------------------------------
-// RNBO state
+// オーディオ（正しい MIDI 音程で 3 音）
 // -------------------------------------------------------
-let device    = null;
-let audioCtx  = null;
-let activeId  = null;   // 現在ONになっているパラメータID
-let paramMap  = new Map(); // paramId(string) -> RNBO Parameter
+let audioCtx   = null;
+let chordSynth = null;
+let pressedIndex = null;
+const heldKeys = new Map(); // e.code -> paramIndex
+
+function midiToHz(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+class ChordSynth {
+  constructor(ctx) {
+    this.ctx = ctx;
+    this.master = ctx.createGain();
+    this.master.gain.value = 0;
+    this.master.connect(ctx.destination);
+    this.oscs = [];
+  }
+
+  play(midiNotes) {
+    this.stop(false);
+    const t = this.ctx.currentTime;
+    this.master.gain.cancelScheduledValues(t);
+    this.master.gain.setValueAtTime(0, t);
+    this.master.gain.linearRampToValueAtTime(0.12, t + 0.02);
+
+    midiNotes.forEach((midi) => {
+      const osc = this.ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = midiToHz(midi);
+      osc.connect(this.master);
+      osc.start(t);
+      this.oscs.push(osc);
+    });
+  }
+
+  stop(fade = true) {
+    const t = this.ctx.currentTime;
+    this.master.gain.cancelScheduledValues(t);
+    if (fade) {
+      this.master.gain.setValueAtTime(this.master.gain.value, t);
+      this.master.gain.linearRampToValueAtTime(0, t + 0.04);
+    } else {
+      this.master.gain.setValueAtTime(0, t);
+    }
+    const oscs = this.oscs;
+    this.oscs = [];
+    setTimeout(() => {
+      oscs.forEach((o) => {
+        try { o.stop(); o.disconnect(); } catch (_) {}
+      });
+    }, 50);
+  }
+}
 
 function setStatus(msg, cls = "") {
   const el = document.getElementById("status");
@@ -251,146 +329,93 @@ function setStatus(msg, cls = "") {
   el.className = cls;
 }
 
-// -------------------------------------------------------
-// パラメータ値をセット（id / name 両方で検索）
-// -------------------------------------------------------
-function setParam(paramId, value) {
-  const p = paramMap.get(paramId);
-  if (p) {
-    p.value = value;
-  } else {
-    console.warn("param not found:", paramId, [...paramMap.keys()]);
-  }
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new AudioContext();
+  if (!chordSynth) chordSynth = new ChordSynth(audioCtx);
+}
+
+function resumeAudioIfNeeded() {
+  ensureAudio();
+  if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
 // -------------------------------------------------------
-// 指定パラメータをOFF（内部共通処理）
+// 押した / 離した
 // -------------------------------------------------------
-function deactivate(paramId) {
-  if (!paramId) return;
-  const b = btnMap[paramId];
-  if (b) b.classList.remove("on");
-  setParam(paramId, 0);
+function startChord(paramIndex) {
+  const btn = btnMap[paramIndex];
+  if (!btn) return;
+
+  if (pressedIndex !== null && pressedIndex !== paramIndex) {
+    const old = btnMap[pressedIndex];
+    if (old) old.classList.remove("on");
+  }
+
+  btn.classList.add("on");
+  pressedIndex = paramIndex;
+  chordSynth.play(PARAM_MIDI[paramIndex]);
+}
+
+function stopChord(paramIndex) {
+  if (pressedIndex !== paramIndex) return;
+  const btn = btnMap[paramIndex];
+  if (btn) btn.classList.remove("on");
+  pressedIndex = null;
+  chordSynth.stop();
 }
 
 // -------------------------------------------------------
-// Button click handler（排他選択）
+// マウス / タッチ：グローバルに pointerup で止める
 // -------------------------------------------------------
-function onChordClick(paramId, btn) {
-  if (activeId === paramId) {
-    // 同じボタンをもう一度 → 停止
-    deactivate(paramId);
-    activeId = null;
-  } else {
-    // 別のボタン → 前のをOFFにして新しいをON
-    deactivate(activeId);
-    btn.classList.add("on");
-    activeId = paramId;
-    setParam(paramId, 1);
+document.addEventListener("pointerup",     () => { if (pressedIndex !== null) stopChord(pressedIndex); });
+document.addEventListener("pointercancel", () => { if (pressedIndex !== null) stopChord(pressedIndex); });
+
+// -------------------------------------------------------
+// キーボード（Major: 1–0 -= / minor: Shift+同キー）
+// -------------------------------------------------------
+function chordFromKeyEvent(e) {
+  if (e.shiftKey) {
+    const i = minKeyIndex.get(e.key);
+    if (i === undefined) return null;
+    return CHORDS[i].minIndex;
   }
+  const i = majKeyIndex.get(e.key);
+  if (i === undefined) return null;
+  return CHORDS[i].majIndex;
 }
 
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input, textarea, select, [contenteditable=true]")) return;
+  if (heldKeys.has(e.code)) return;  // 既に押されている
 
-// -------------------------------------------------------
-// Resume AudioContext on first gesture (browser policy)
-// -------------------------------------------------------
-document.body.addEventListener("click", () => {
-  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-}, { once: false });
+  const paramIndex = chordFromKeyEvent(e);
+  if (paramIndex === null) return;
 
-// -------------------------------------------------------
-// Load RNBO patch from JSON file
-// -------------------------------------------------------
-async function loadPatch(patcherData) {
-  try {
-    setStatus("読み込み中…");
-
-    if (!audioCtx) {
-      audioCtx = new AudioContext({ sampleRate: 44100 });
-    }
-
-    if (typeof RNBO === "undefined" || !RNBO.createDevice) {
-      throw new Error("RNBO ライブラリが読み込めませんでした。ネット接続を確認してください。");
-    }
-
-    device = await RNBO.createDevice({ context: audioCtx, patcher: patcherData });
-    device.node.connect(audioCtx.destination);
-
-    // id / name 両方で引けるよう paramMap を構築
-    paramMap = new Map();
-    device.parameters.forEach(p => {
-      paramMap.set(p.id, p);
-      if (p.name && p.name !== p.id) paramMap.set(p.name, p);
-    });
-
-    // Enable all buttons
-    Object.values(btnMap).forEach(b => (b.disabled = false));
-
-    // Sync button states from device（排他: 最初にONのものがあれば1つだけ反映）
-    activeId = null;
-    device.parameters.forEach(p => {
-      const b = btnMap[p.id] || btnMap[p.name];
-      if (b) {
-        const isOn = p.value > 0.5;
-        b.classList.toggle("on", isOn);
-        if (isOn) activeId = p.id;
-      }
-    });
-
-    document.getElementById("setup").classList.add("hidden");
-    setStatus("✓ パッチ読み込み完了 — ボタンを押してコードを鳴らしてください", "ok");
-  } catch (e) {
-    setStatus("エラー: " + e.message, "err");
-    console.error(e);
-  }
-}
-
-// -------------------------------------------------------
-// File input
-// -------------------------------------------------------
-document.getElementById("fileInput").addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  try {
-    const text = await file.text();
-    const json = JSON.parse(text);
-    await loadPatch(json);
-  } catch (err) {
-    setStatus("JSONの解析に失敗しました: " + err.message, "err");
-  }
-});
-
-// -------------------------------------------------------
-// Drag & drop
-// -------------------------------------------------------
-document.addEventListener("dragover", e => e.preventDefault());
-document.addEventListener("drop", async (e) => {
   e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
-  try {
-    const text = await file.text();
-    const json = JSON.parse(text);
-    await loadPatch(json);
-  } catch (err) {
-    setStatus("JSONの解析に失敗しました: " + err.message, "err");
-  }
+  resumeAudioIfNeeded();
+  heldKeys.set(e.code, paramIndex);
+  startChord(paramIndex);
 });
 
+document.addEventListener("keyup", (e) => {
+  const paramIndex = heldKeys.get(e.code);
+  if (paramIndex === undefined) return;
+  heldKeys.delete(e.code);
+  stopChord(paramIndex);
+});
+
+// Resume AudioContext on click
+document.body.addEventListener("click", resumeAudioIfNeeded);
+
 // -------------------------------------------------------
-// Auto-load patch.export.json if served from a local server
+// 起動（RNBO パッチ不要・正しい音程で即演奏可能）
 // -------------------------------------------------------
-(async () => {
-  try {
-    const res = await fetch("patch.export.json");
-    if (res.ok) {
-      const json = await res.json();
-      await loadPatch(json);
-    }
-  } catch {
-    // ローカルファイルからのアクセス（CORS制限）は無視
-  }
-})();
+function initApp() {
+  document.getElementById("setup").classList.add("hidden");
+  setStatus("準備完了 — 押している間だけ鳴ります（1–0 -= / Shift+同キー）", "ok");
+}
+
+initApp();
 </script>
 </body>
 </html>
