@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHORDER</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    color: #ccccee;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 40px;
+  }
+
+  /* ---- Title bar ---- */
+  header {
+    width: 100%;
+    background: #16213e;
+    padding: 18px 0 14px;
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #e8a44a;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2a4a;
+    margin-bottom: 20px;
+  }
+
+  /* ---- Setup panel ---- */
+  #setup {
+    background: #16213e;
+    border: 1px dashed #3a3a5a;
+    border-radius: 12px;
+    padding: 22px 30px;
+    text-align: center;
+    max-width: 460px;
+    width: 90%;
+    margin-bottom: 24px;
+    transition: opacity .3s;
+  }
+  #setup.hidden { display: none; }
+
+  #setup p { font-size: .88rem; color: #8888aa; line-height: 1.7; margin-bottom: 14px; }
+  #setup code {
+    background: #0d1b2a;
+    color: #5a9fd4;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: .82rem;
+  }
+
+  #loadBtn {
+    display: inline-block;
+    cursor: pointer;
+    background: #e8a44a;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 26px;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: background .15s;
+  }
+  #loadBtn:hover { background: #f0b85a; }
+  #fileInput { display: none; }
+
+  /* ---- Status badge ---- */
+  #status {
+    font-size: .78rem;
+    color: #888;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  #status.ok { color: #6dbf87; }
+  #status.err { color: #e05a5a; }
+
+  /* ---- Chord grid ---- */
+  .grid-wrap {
+    width: 100%;
+    max-width: 500px;
+    padding: 0 16px;
+  }
+
+  .col-headers {
+    display: grid;
+    grid-template-columns: 56px 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 0 2px;
+  }
+  .col-headers span {
+    text-align: center;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .col-headers .maj { color: #e8a44a; }
+  .col-headers .min { color: #5a9fd4; }
+
+  .chord-row {
+    display: grid;
+    grid-template-columns: 56px 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+
+  .key-label {
+    display: flex;
+    align-items: center;
+    font-size: .9rem;
+    font-weight: 700;
+    color: #666688;
+    padding-left: 4px;
+  }
+
+  /* ---- Chord button ---- */
+  .chord-btn {
+    position: relative;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 4px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .08s, filter .08s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .chord-btn:active { transform: scale(.95); }
+  .chord-btn:disabled { opacity: .35; cursor: default; }
+
+  /* Major */
+  .chord-btn.maj       { background: #3a3050; color: #8888aa; }
+  .chord-btn.maj.on    { background: #e8a44a; color: #1a1a2e; box-shadow: 0 0 14px #e8a44a55; }
+  .chord-btn.maj:hover:not(:disabled):not(.on) { background: #4a4060; }
+
+  /* Minor */
+  .chord-btn.min       { background: #1e2d3d; color: #8888aa; }
+  .chord-btn.min.on    { background: #5a9fd4; color: #1a1a2e; box-shadow: 0 0 14px #5a9fd455; }
+  .chord-btn.min:hover:not(:disabled):not(.on) { background: #2a3d4d; }
+
+
+  @media (max-width: 400px) {
+    .chord-btn { font-size: .78rem; padding: 9px 2px; }
+    .key-label { font-size: .78rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>⬡ &nbsp; C H O R D E R &nbsp; ⬡</header>
+
+<p id="status">パッチ未読み込み</p>
+
+<!-- Setup / load panel -->
+<div id="setup">
+  <p>
+    Maxで <code>rnbo~</code> パッチを開き、<br>
+    <strong>Export → Web Export</strong> を実行して<br>
+    生成された <code>patch.export.json</code> を読み込んでください。<br><br>
+    ファイルを選択するか、ここにドロップしてください。
+  </p>
+  <label id="loadBtn" for="fileInput">📂 &nbsp;パッチを読み込む</label>
+  <input type="file" id="fileInput" accept=".json">
+</div>
+
+<!-- Chord grid -->
+<div class="grid-wrap">
+  <div class="col-headers">
+    <span></span>
+    <span class="maj">MAJOR</span>
+    <span class="min">minor</span>
+  </div>
+  <div id="grid"></div>
+</div>
+
+<!-- RNBO JS library -->
+<script src="https://cdn.cycling74.com/rnbo/latest/rnbo.min.js"></script>
+
+<script>
+// -------------------------------------------------------
+// Chord data — parallel to RNBO parameter indices 0..23
+// -------------------------------------------------------
+const CHORDS = [
+  { key: "C",  majId: "CM",  minId: "Cm",  majLabel: "C",  minLabel: "Cm"  },
+  { key: "D♭", majId: "DfM", minId: "Dfm", majLabel: "D♭", minLabel: "D♭m" },
+  { key: "D",  majId: "DM",  minId: "Dm",  majLabel: "D",  minLabel: "Dm"  },
+  { key: "E♭", majId: "EfM", minId: "Efm", majLabel: "E♭", minLabel: "E♭m" },
+  { key: "E",  majId: "EM",  minId: "Em",  majLabel: "E",  minLabel: "Em"  },
+  { key: "F",  majId: "FM",  minId: "Fm",  majLabel: "F",  minLabel: "Fm"  },
+  { key: "G♭", majId: "GfM", minId: "Gfm", majLabel: "G♭", minLabel: "G♭m" },
+  { key: "G",  majId: "GM",  minId: "Gm",  majLabel: "G",  minLabel: "Gm"  },
+  { key: "A♭", majId: "AfM", minId: "Afm", majLabel: "A♭", minLabel: "A♭m" },
+  { key: "A",  majId: "AM",  minId: "Am",  majLabel: "A",  minLabel: "Am"  },
+  { key: "B♭", majId: "BfM", minId: "Bfm", majLabel: "B♭", minLabel: "B♭m" },
+  { key: "B",  majId: "BM",  minId: "Bm",  majLabel: "B",  minLabel: "Bm"  },
+];
+
+// -------------------------------------------------------
+// Build button grid
+// -------------------------------------------------------
+const grid = document.getElementById("grid");
+const btnMap = {}; // paramId -> <button>
+
+CHORDS.forEach(({ key, majId, minId, majLabel, minLabel }) => {
+  const row = document.createElement("div");
+  row.className = "chord-row";
+
+  const label = document.createElement("div");
+  label.className = "key-label";
+  label.textContent = key;
+
+  const makBtn = (id, cssClass, text) => {
+    const b = document.createElement("button");
+    b.className = `chord-btn ${cssClass}`;
+    b.textContent = text;
+    b.disabled = true;
+    b.dataset.paramId = id;
+    b.addEventListener("click", () => onChordClick(id, b));
+    btnMap[id] = b;
+    return b;
+  };
+
+  row.appendChild(label);
+  row.appendChild(makBtn(majId, "maj", majLabel));
+  row.appendChild(makBtn(minId, "min", minLabel));
+  grid.appendChild(row);
+});
+
+// -------------------------------------------------------
+// RNBO state
+// -------------------------------------------------------
+let device    = null;
+let audioCtx  = null;
+let activeId  = null;   // 現在ONになっているパラメータID
+let paramMap  = new Map(); // paramId(string) -> RNBO Parameter
+
+function setStatus(msg, cls = "") {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.className = cls;
+}
+
+// -------------------------------------------------------
+// パラメータ値をセット（id / name 両方で検索）
+// -------------------------------------------------------
+function setParam(paramId, value) {
+  const p = paramMap.get(paramId);
+  if (p) {
+    p.value = value;
+  } else {
+    console.warn("param not found:", paramId, [...paramMap.keys()]);
+  }
+}
+
+// -------------------------------------------------------
+// 指定パラメータをOFF（内部共通処理）
+// -------------------------------------------------------
+function deactivate(paramId) {
+  if (!paramId) return;
+  const b = btnMap[paramId];
+  if (b) b.classList.remove("on");
+  setParam(paramId, 0);
+}
+
+// -------------------------------------------------------
+// Button click handler（排他選択）
+// -------------------------------------------------------
+function onChordClick(paramId, btn) {
+  if (activeId === paramId) {
+    // 同じボタンをもう一度 → 停止
+    deactivate(paramId);
+    activeId = null;
+  } else {
+    // 別のボタン → 前のをOFFにして新しいをON
+    deactivate(activeId);
+    btn.classList.add("on");
+    activeId = paramId;
+    setParam(paramId, 1);
+  }
+}
+
+
+// -------------------------------------------------------
+// Resume AudioContext on first gesture (browser policy)
+// -------------------------------------------------------
+document.body.addEventListener("click", () => {
+  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+}, { once: false });
+
+// -------------------------------------------------------
+// Load RNBO patch from JSON file
+// -------------------------------------------------------
+async function loadPatch(patcherData) {
+  try {
+    setStatus("読み込み中…");
+
+    if (!audioCtx) {
+      audioCtx = new AudioContext({ sampleRate: 44100 });
+    }
+
+    if (typeof RNBO === "undefined" || !RNBO.createDevice) {
+      throw new Error("RNBO ライブラリが読み込めませんでした。ネット接続を確認してください。");
+    }
+
+    device = await RNBO.createDevice({ context: audioCtx, patcher: patcherData });
+    device.node.connect(audioCtx.destination);
+
+    // id / name 両方で引けるよう paramMap を構築
+    paramMap = new Map();
+    device.parameters.forEach(p => {
+      paramMap.set(p.id, p);
+      if (p.name && p.name !== p.id) paramMap.set(p.name, p);
+    });
+
+    // Enable all buttons
+    Object.values(btnMap).forEach(b => (b.disabled = false));
+
+    // Sync button states from device（排他: 最初にONのものがあれば1つだけ反映）
+    activeId = null;
+    device.parameters.forEach(p => {
+      const b = btnMap[p.id] || btnMap[p.name];
+      if (b) {
+        const isOn = p.value > 0.5;
+        b.classList.toggle("on", isOn);
+        if (isOn) activeId = p.id;
+      }
+    });
+
+    document.getElementById("setup").classList.add("hidden");
+    setStatus("✓ パッチ読み込み完了 — ボタンを押してコードを鳴らしてください", "ok");
+  } catch (e) {
+    setStatus("エラー: " + e.message, "err");
+    console.error(e);
+  }
+}
+
+// -------------------------------------------------------
+// File input
+// -------------------------------------------------------
+document.getElementById("fileInput").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const json = JSON.parse(text);
+    await loadPatch(json);
+  } catch (err) {
+    setStatus("JSONの解析に失敗しました: " + err.message, "err");
+  }
+});
+
+// -------------------------------------------------------
+// Drag & drop
+// -------------------------------------------------------
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const json = JSON.parse(text);
+    await loadPatch(json);
+  } catch (err) {
+    setStatus("JSONの解析に失敗しました: " + err.message, "err");
+  }
+});
+
+// -------------------------------------------------------
+// Auto-load patch.export.json if served from a local server
+// -------------------------------------------------------
+(async () => {
+  try {
+    const res = await fetch("patch.export.json");
+    if (res.ok) {
+      const json = await res.json();
+      await loadPatch(json);
+    }
+  } catch {
+    // ローカルファイルからのアクセス（CORS制限）は無視
+  }
+})();
+</script>
+</body>
+</html>

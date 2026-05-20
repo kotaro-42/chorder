@@ -1,0 +1,79 @@
+[
+  {
+    "name": "untitled",
+    "preset": {
+      "AM": {
+        "value": 0
+      },
+      "AfM": {
+        "value": 0
+      },
+      "Afm": {
+        "value": 0
+      },
+      "Am": {
+        "value": 0
+      },
+      "BM": {
+        "value": 0
+      },
+      "BfM": {
+        "value": 0
+      },
+      "Bfm": {
+        "value": 0
+      },
+      "Bm": {
+        "value": 0
+      },
+      "CM": {
+        "value": 0
+      },
+      "Cm": {
+        "value": 0
+      },
+      "DM": {
+        "value": 0
+      },
+      "DfM": {
+        "value": 0
+      },
+      "Dfm": {
+        "value": 0
+      },
+      "Dm": {
+        "value": 0
+      },
+      "EM": {
+        "value": 0
+      },
+      "EfM": {
+        "value": 0
+      },
+      "Efm": {
+        "value": 0
+      },
+      "Em": {
+        "value": 0
+      },
+      "FM": {
+        "value": 0
+      },
+      "Fm": {
+        "value": 0
+      },
+      "GM": {
+        "value": 0
+      },
+      "GfM": {
+        "value": 0
+      },
+      "Gfm": {
+        "value": 0
+      },
+      "Gm": {
+        "value": 0
+      }
+    }
+  }
+]
