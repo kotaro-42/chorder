@@ -8,9 +8,9 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #1a1a2e;
-    color: #ccccee;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -21,66 +21,23 @@
   /* ---- Title bar ---- */
   header {
     width: 100%;
-    background: #16213e;
-    padding: 18px 0 14px;
-    text-align: center;
-    letter-spacing: 6px;
+    max-width: 500px;
+    padding: 18px 16px 14px;
+    text-align: left;
+    letter-spacing: 2px;
     font-size: 1.35rem;
     font-weight: 800;
-    color: #e8a44a;
+    color: #111111;
     text-transform: uppercase;
-    border-bottom: 1px solid #2a2a4a;
+    border-bottom: 1px solid #dddddd;
     margin-bottom: 20px;
   }
 
-  /* ---- Setup panel ---- */
-  #setup {
-    background: #16213e;
-    border: 1px dashed #3a3a5a;
-    border-radius: 12px;
-    padding: 22px 30px;
-    text-align: center;
-    max-width: 460px;
-    width: 90%;
-    margin-bottom: 24px;
-    transition: opacity .3s;
-  }
-  #setup.hidden { display: none; }
+  /* ---- Setup panel (hidden) ---- */
+  #setup { display: none; }
 
-  #setup p { font-size: .88rem; color: #8888aa; line-height: 1.7; margin-bottom: 14px; }
-  #setup code {
-    background: #0d1b2a;
-    color: #5a9fd4;
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: .82rem;
-  }
-
-  #loadBtn {
-    display: inline-block;
-    cursor: pointer;
-    background: #e8a44a;
-    color: #1a1a2e;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 26px;
-    font-size: .9rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: background .15s;
-  }
-  #loadBtn:hover { background: #f0b85a; }
-  #fileInput { display: none; }
-
-  /* ---- Status badge ---- */
-  #status {
-    font-size: .78rem;
-    color: #888;
-    margin-bottom: 14px;
-    letter-spacing: 1px;
-  }
-  #status.ok { color: #6dbf87; }
-  #status.err { color: #e05a5a; }
+  /* ---- Status badge (hidden) ---- */
+  #status { display: none; }
 
   /* ---- Chord grid ---- */
   .grid-wrap {
@@ -102,9 +59,8 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+    color: #111111;
   }
-  .col-headers .maj { color: #e8a44a; }
-  .col-headers .min { color: #5a9fd4; }
 
   .chord-row {
     display: grid;
@@ -118,39 +74,32 @@
     text-align: center;
     font-size: .85rem;
     font-weight: 700;
-    color: #666688;
-    font-family: ui-monospace, monospace;
+    color: #888888;
+    font-family: 'Courier New', Courier, monospace;
   }
 
   /* ---- Chord button ---- */
   .chord-btn {
     position: relative;
-    border: none;
+    border: 1px solid #cccccc;
     border-radius: 8px;
     padding: 10px 4px;
     font-size: .9rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .06s;
+    transition: background .12s, transform .06s;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
-    touch-action: none;  /* pointer events を確実に受け取る */
+    touch-action: none;
+    background: #f5f5f5;
+    color: #111111;
   }
   .chord-btn:active,
-  .chord-btn.on { transform: scale(.95); }
+  .chord-btn.on { transform: scale(.95); background: #dddddd; }
   .chord-btn:disabled { opacity: .35; cursor: default; }
 
-  /* Major */
-  .chord-btn.maj       { background: #3a3050; color: #8888aa; }
-  .chord-btn.maj.on    { background: #e8a44a; color: #1a1a2e; box-shadow: 0 0 14px #e8a44a55; }
-  .chord-btn.maj:hover:not(:disabled):not(.on) { background: #4a4060; }
-
-  /* Minor */
-  .chord-btn.min       { background: #1e2d3d; color: #8888aa; }
-  .chord-btn.min.on    { background: #5a9fd4; color: #1a1a2e; box-shadow: 0 0 14px #5a9fd455; }
-  .chord-btn.min:hover:not(:disabled):not(.on) { background: #2a3d4d; }
-
+  .chord-btn:hover:not(:disabled) { background: #e0e0e0; }
 
   @media (max-width: 400px) {
     .chord-btn { font-size: .78rem; padding: 9px 2px; }
@@ -160,7 +109,7 @@
 </head>
 <body>
 
-<header>⬡ &nbsp; C H O R D E R &nbsp; ⬡</header>
+<header>CHORDER</header>
 
 <p id="status"></p>
 <div id="setup" class="hidden" aria-hidden="true"></div>
@@ -169,8 +118,8 @@
 <div class="grid-wrap">
   <div class="col-headers">
     <span></span>
-    <span class="maj">MAJOR</span>
-    <span class="min">minor</span>
+    <span>MAJOR</span>
+    <span>minor</span>
   </div>
   <div id="grid"></div>
 </div>
@@ -412,7 +361,6 @@ document.body.addEventListener("click", resumeAudioIfNeeded);
 // -------------------------------------------------------
 function initApp() {
   document.getElementById("setup").classList.add("hidden");
-  setStatus("準備完了", "ok");
 }
 
 initApp();
