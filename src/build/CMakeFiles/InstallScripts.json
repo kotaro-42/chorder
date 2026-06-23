@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/kotarosato/Desktop/data/5 RASM C++/src/build/cmake_install.cmake",
+		"/Users/kotarosato/Desktop/data/5 RASM C++/src/build/_deps/glfw-build/cmake_install.cmake",
+		"/Users/kotarosato/Desktop/data/5 RASM C++/src/build/_deps/glfw-build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

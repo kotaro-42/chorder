@@ -30,7 +30,65 @@
     color: #111111;
     text-transform: uppercase;
     border-bottom: 1px solid #dddddd;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+  }
+
+  /* ---- Mode & Control bar ---- */
+  .control-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .mode-tabs {
+    display: flex;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .mode-tab {
+    padding: 6px 14px;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: #f5f5f5;
+    color: #666666;
+    transition: background .15s, color .15s;
+  }
+  .mode-tab.active {
+    background: #111111;
+    color: #ffffff;
+  }
+  .mode-tab:hover:not(.active) {
+    background: #e0e0e0;
+  }
+
+  .mute-btn {
+    margin-left: auto;
+    padding: 6px 14px;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background: #f5f5f5;
+    color: #666666;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .mute-btn.unmuted {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
   }
 
   /* ---- Setup panel (hidden) ---- */
@@ -38,6 +96,154 @@
 
   /* ---- Status badge (hidden) ---- */
   #status { display: none; }
+
+  /* ---- Gear button ---- */
+  .gear-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gear-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #888888;
+    transition: fill .15s, transform .3s;
+  }
+  .gear-btn:hover svg { fill: #111111; }
+  .gear-btn.open svg { fill: #111111; transform: rotate(90deg); }
+
+  header {
+    position: relative;
+  }
+
+  /* ---- Settings overlay ---- */
+  .settings-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.3);
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+  .settings-overlay.open {
+    display: flex;
+  }
+
+  .settings-panel {
+    width: 100%;
+    max-width: 460px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.15);
+    padding: 24px 20px;
+  }
+
+  .settings-panel h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    color: #111111;
+  }
+
+  .settings-section {
+    margin-bottom: 22px;
+  }
+  .settings-section-title {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888888;
+    margin-bottom: 10px;
+  }
+
+  /* Speed selector */
+  .speed-pills {
+    display: flex;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .speed-pill {
+    flex: 1;
+    padding: 8px 0;
+    text-align: center;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: #f5f5f5;
+    color: #666666;
+    transition: background .15s, color .15s;
+  }
+  .speed-pill.active {
+    background: #111111;
+    color: #ffffff;
+  }
+  .speed-pill:hover:not(.active) {
+    background: #e0e0e0;
+  }
+
+  /* Transition rules */
+  .rule-row {
+    display: flex;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .rule-row:last-child { border-bottom: none; }
+
+  .rule-name {
+    flex: 1;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #333333;
+  }
+  .rule-prob {
+    width: 44px;
+    text-align: right;
+    font-size: .72rem;
+    font-weight: 600;
+    color: #999999;
+    margin-right: 10px;
+  }
+
+  .level-select {
+    padding: 4px 8px;
+    font-size: .72rem;
+    font-weight: 700;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background: #f5f5f5;
+    color: #333333;
+    cursor: pointer;
+    outline: none;
+  }
+  .level-select:focus {
+    border-color: #111111;
+  }
+  .level-select.level-high    { color: #c62828; }
+  .level-select.level-middle  { color: #e65100; }
+  .level-select.level-low     { color: #1565c0; }
+  .level-select.level-special { color: #555555; }
 
   /* ---- Chord grid ---- */
   .grid-wrap {
@@ -87,7 +293,7 @@
     font-size: .9rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background .12s, transform .06s;
+    transition: background .12s, transform .06s, border-color .15s;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -97,6 +303,11 @@
   }
   .chord-btn:active,
   .chord-btn.on { transform: scale(.95); background: #dddddd; }
+  .chord-btn.auto-highlight {
+    background: #c8e6c9;
+    border-color: #66bb6a;
+    transform: scale(.97);
+  }
   .chord-btn:disabled { opacity: .35; cursor: default; }
 
   .chord-btn:hover:not(:disabled) { background: #e0e0e0; }
@@ -109,7 +320,47 @@
 </head>
 <body>
 
-<header>CHORDER</header>
+<header>
+  CHORDER
+  <button class="gear-btn" id="gearBtn" aria-label="Settings">
+    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.61 3.61 0 0 1 8.4 12 3.61 3.61 0 0 1 12 8.4a3.61 3.61 0 0 1 3.6 3.6 3.61 3.61 0 0 1-3.6 3.6z"/></svg>
+  </button>
+</header>
+
+<!-- Settings overlay -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel" id="settingsPanel">
+    <h2>Settings</h2>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Speed</div>
+      <div class="speed-pills" id="speedPills">
+        <button class="speed-pill" data-speed="lo">Lo</button>
+        <button class="speed-pill active" data-speed="middle">Middle</button>
+        <button class="speed-pill" data-speed="hi">Hi</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Major Transitions</div>
+      <div id="majorRules"></div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Minor Transitions</div>
+      <div id="minorRules"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Mode & Mute controls -->
+<div class="control-bar">
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="auto">Auto</button>
+    <button class="mode-tab" data-mode="performance">Manual</button>
+  </div>
+  <button class="mute-btn" id="muteBtn">OFF</button>
+</div>
 
 <p id="status"></p>
 <div id="setup" class="hidden" aria-hidden="true"></div>
@@ -128,37 +379,16 @@
 // -------------------------------------------------------
 // Chord data — parallel to RNBO parameter indices 0..23
 // -------------------------------------------------------
-// キー: Major 1–0 - =  /  minor Shift+同キー (! … +)
 const MAJ_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
 const MIN_KEYS = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
 
-// RNBO パラメータ index 0..23 に対応する正しい MIDI 音（3和音）
-// rnbo_source.cpp の message_XX_init と同期
 const PARAM_MIDI = [
-  [60, 64, 67], // 0  CM  C major
-  [60, 63, 67], // 1  Cm  C minor
-  [61, 65, 68], // 2  DfM D♭ major
-  [61, 64, 68], // 3  Dfm D♭ minor
-  [62, 66, 69], // 4  DM  D major
-  [62, 65, 69], // 5  Dm  D minor
-  [63, 67, 70], // 6  EfM E♭ major
-  [63, 66, 70], // 7  Efm E♭ minor
-  [64, 68, 71], // 8  EM  E major
-  [64, 67, 71], // 9  Em  E minor
-  [65, 69, 72], // 10 FM  F major
-  [65, 68, 72], // 11 Fm  F minor
-  [66, 70, 73], // 12 GfM G♭ major
-  [66, 69, 73], // 13 Gfm G♭ minor
-  [67, 71, 74], // 14 GM  G major
-  [67, 70, 74], // 15 Gm  G minor
-  [68, 72, 75], // 16 AfM A♭ major
-  [68, 71, 75], // 17 Afm A♭ minor
-  [69, 73, 76], // 18 AM  A major
-  [69, 72, 76], // 19 Am  A minor
-  [70, 74, 77], // 20 BfM B♭ major
-  [70, 73, 77], // 21 Bfm B♭ minor
-  [71, 75, 78], // 22 BM  B major
-  [71, 74, 78], // 23 Bm  B minor
+  [60, 64, 67], [60, 63, 67], [61, 65, 68], [61, 64, 68],
+  [62, 66, 69], [62, 65, 69], [63, 67, 70], [63, 66, 70],
+  [64, 68, 71], [64, 67, 71], [65, 69, 72], [65, 68, 72],
+  [66, 70, 73], [66, 69, 73], [67, 71, 74], [67, 70, 74],
+  [68, 72, 75], [68, 71, 75], [69, 73, 76], [69, 72, 76],
+  [70, 74, 77], [70, 73, 77], [71, 75, 78], [71, 74, 78],
 ];
 
 const CHORDS = [
@@ -180,10 +410,123 @@ const majKeyIndex = new Map(MAJ_KEYS.map((k, i) => [k, i]));
 const minKeyIndex = new Map(MIN_KEYS.map((k, i) => [k, i]));
 
 // -------------------------------------------------------
+// MarkovEngine (ported from C++ src/core/progression)
+// -------------------------------------------------------
+class MarkovEngine {
+  constructor() {
+    this.notes = ["C","D♭","D","E♭","E","F","G♭","G","A♭","A","B♭","B"];
+
+    this.majorRule = [
+      { interval: 5,  quality: "maj", level: "High" },
+      { interval: 7,  quality: "maj", level: "High" },
+      { interval: 4,  quality: "maj", level: "High" },
+      { interval: 10, quality: "maj", level: "Middle" },
+      { interval: 8,  quality: "maj", level: "Middle" },
+      { interval: 1,  quality: "maj", level: "Middle" },
+      { interval: 11, quality: "maj", level: "Middle" },
+      { interval: 4,  quality: "min", level: "Middle" },
+      { interval: 9,  quality: "min", level: "Middle" },
+      { interval: 2,  quality: "min", level: "Middle" },
+    ];
+
+    this.minorRule = [
+      { interval: 0,  quality: "maj", level: "High" },
+      { interval: 5,  quality: "maj", level: "High" },
+      { interval: 7,  quality: "maj", level: "High" },
+      { interval: 10, quality: "maj", level: "High" },
+      { interval: 4,  quality: "min", level: "Middle" },
+      { interval: 2,  quality: "min", level: "Middle" },
+      { interval: 7,  quality: "min", level: "Middle" },
+      { interval: 8,  quality: "maj", level: "Middle" },
+    ];
+
+    this.probConfig = {
+      specialPercent: 1.0,
+      highRatio: 9.0,
+      middleRatio: 3.0,
+      lowRatio: 1.0,
+    };
+
+    this.speedConfig = { lo: 3.0, mid: 1.0, hi: 1.0 / 3.0 };
+    this.speed = "middle";
+
+    // Weber-Fechner time distribution
+    this.baseTimeChoices = [];
+    for (let i = 0; i < 50; i++) {
+      const x = i / 49.0;
+      this.baseTimeChoices.push(Math.pow(60.0, x));
+    }
+
+    // Random initial major chord
+    this.current = { root: Math.floor(Math.random() * 12), quality: "maj" };
+  }
+
+  getRatio(level) {
+    switch (level) {
+      case "High": return this.probConfig.highRatio;
+      case "Middle": return this.probConfig.middleRatio;
+      case "Low": return this.probConfig.lowRatio;
+      default: return 0;
+    }
+  }
+
+  computeProbabilities(rules) {
+    let nSpecial = 0;
+    let normalWeightSum = 0;
+
+    for (const r of rules) {
+      if (r.level === "Special") nSpecial++;
+      else normalWeightSum += this.getRatio(r.level);
+    }
+
+    const totalSpecialPct = Math.min(nSpecial * this.probConfig.specialPercent, 100);
+    const remainingPct = 100 - totalSpecialPct;
+
+    return rules.map(r => {
+      if (r.level === "Special") return this.probConfig.specialPercent;
+      const ratio = this.getRatio(r.level);
+      return normalWeightSum > 0 ? remainingPct * ratio / normalWeightSum : 0;
+    });
+  }
+
+  step() {
+    const rule = this.current.quality === "maj" ? this.majorRule : this.minorRule;
+    const probs = this.computeProbabilities(rule);
+
+    const total = probs.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    let idx = 0;
+    for (let i = 0; i < probs.length; i++) {
+      r -= probs[i];
+      if (r <= 0) { idx = i; break; }
+    }
+
+    const next = rule[idx];
+    this.current.root = (this.current.root + next.interval) % 12;
+    this.current.quality = next.quality;
+  }
+
+  getWaitSeconds() {
+    const idx = Math.floor(Math.random() * this.baseTimeChoices.length);
+    const multiplier = this.speedConfig[this.speed === "lo" ? "lo" : this.speed === "hi" ? "hi" : "mid"];
+    return this.baseTimeChoices[idx] * multiplier;
+  }
+
+  currentChordName() {
+    return this.notes[this.current.root] + (this.current.quality === "maj" ? " Major" : " Minor");
+  }
+
+  currentParamIndex() {
+    const idx = this.current.root * 2 + (this.current.quality === "min" ? 1 : 0);
+    return idx;
+  }
+}
+
+// -------------------------------------------------------
 // Build button grid
 // -------------------------------------------------------
 const grid = document.getElementById("grid");
-const btnMap = {}; // paramIndex -> <button>
+const btnMap = {};
 
 CHORDS.forEach(({ majIndex, minIndex, majLabel, minLabel, majKey }) => {
   const row = document.createElement("div");
@@ -201,6 +544,8 @@ CHORDS.forEach(({ majIndex, minIndex, majLabel, minLabel, majKey }) => {
 
     b.addEventListener("pointerdown", (e) => {
       e.preventDefault();
+      if (currentMode !== "performance") return;
+      if (isMuted) return;
       resumeAudioIfNeeded();
       startChord(paramIndex);
     });
@@ -216,12 +561,12 @@ CHORDS.forEach(({ majIndex, minIndex, majLabel, minLabel, majKey }) => {
 });
 
 // -------------------------------------------------------
-// オーディオ（正しい MIDI 音程で 3 音）
+// Audio
 // -------------------------------------------------------
 let audioCtx   = null;
 let chordSynth = null;
 let pressedIndex = null;
-const heldKeys = new Map(); // e.code -> paramIndex
+const heldKeys = new Map();
 
 function midiToHz(midi) {
   return 440 * Math.pow(2, (midi - 69) / 12);
@@ -272,12 +617,6 @@ class ChordSynth {
   }
 }
 
-function setStatus(msg, cls = "") {
-  const el = document.getElementById("status");
-  el.textContent = msg;
-  el.className = cls;
-}
-
 function ensureAudio() {
   if (!audioCtx) audioCtx = new AudioContext();
   if (!chordSynth) chordSynth = new ChordSynth(audioCtx);
@@ -289,7 +628,106 @@ function resumeAudioIfNeeded() {
 }
 
 // -------------------------------------------------------
-// 押した / 離した
+// Mode & Mute state
+// -------------------------------------------------------
+let currentMode = "auto";
+let isMuted = true;
+const markov = new MarkovEngine();
+let autoTimerId = null;
+let autoHighlightedBtn = null;
+
+const muteBtn = document.getElementById("muteBtn");
+const modeTabs = document.querySelectorAll(".mode-tab");
+
+// ---- Mode switching ----
+modeTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    const mode = tab.dataset.mode;
+    if (mode === currentMode) return;
+
+    modeTabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentMode = mode;
+
+    if (mode === "auto") {
+      startAutoMode();
+    } else {
+      stopAutoMode();
+      if (chordSynth) chordSynth.stop();
+    }
+  });
+});
+
+// ---- Mute button ----
+muteBtn.addEventListener("click", () => {
+  resumeAudioIfNeeded();
+  isMuted = !isMuted;
+  muteBtn.textContent = isMuted ? "OFF" : "ON";
+  muteBtn.classList.toggle("unmuted", !isMuted);
+
+  if (isMuted && chordSynth) {
+    chordSynth.stop();
+  }
+
+  if (!isMuted && currentMode === "auto") {
+    const paramIdx = markov.currentParamIndex();
+    chordSynth.play(PARAM_MIDI[paramIdx]);
+  }
+});
+
+// -------------------------------------------------------
+// Auto mode logic
+// -------------------------------------------------------
+function startAutoMode() {
+  stopAutoMode();
+  showCurrentAutoChord();
+  scheduleNextStep();
+}
+
+function stopAutoMode() {
+  if (autoTimerId !== null) {
+    clearTimeout(autoTimerId);
+    autoTimerId = null;
+  }
+  clearAutoHighlight();
+}
+
+function showCurrentAutoChord() {
+  const paramIdx = markov.currentParamIndex();
+
+  clearAutoHighlight();
+  const btn = btnMap[paramIdx];
+  if (btn) {
+    btn.classList.add("auto-highlight");
+    autoHighlightedBtn = btn;
+  }
+
+  if (!isMuted) {
+    resumeAudioIfNeeded();
+    chordSynth.play(PARAM_MIDI[paramIdx]);
+  }
+}
+
+function clearAutoHighlight() {
+  if (autoHighlightedBtn) {
+    autoHighlightedBtn.classList.remove("auto-highlight");
+    autoHighlightedBtn = null;
+  }
+}
+
+function scheduleNextStep() {
+  const wait = markov.getWaitSeconds();
+  const clampedWait = Math.max(0.5, Math.min(wait, 10));
+
+  autoTimerId = setTimeout(() => {
+    markov.step();
+    showCurrentAutoChord();
+    scheduleNextStep();
+  }, clampedWait * 1000);
+}
+
+// -------------------------------------------------------
+// Performance mode: press / release
 // -------------------------------------------------------
 function startChord(paramIndex) {
   const btn = btnMap[paramIndex];
@@ -314,13 +752,17 @@ function stopChord(paramIndex) {
 }
 
 // -------------------------------------------------------
-// マウス / タッチ：グローバルに pointerup で止める
+// Mouse / touch global release
 // -------------------------------------------------------
-document.addEventListener("pointerup",     () => { if (pressedIndex !== null) stopChord(pressedIndex); });
-document.addEventListener("pointercancel", () => { if (pressedIndex !== null) stopChord(pressedIndex); });
+document.addEventListener("pointerup", () => {
+  if (currentMode === "performance" && pressedIndex !== null) stopChord(pressedIndex);
+});
+document.addEventListener("pointercancel", () => {
+  if (currentMode === "performance" && pressedIndex !== null) stopChord(pressedIndex);
+});
 
 // -------------------------------------------------------
-// キーボード（Major: 1–0 -= / minor: Shift+同キー）
+// Keyboard (Performance mode only)
 // -------------------------------------------------------
 function chordFromKeyEvent(e) {
   if (e.shiftKey) {
@@ -334,8 +776,10 @@ function chordFromKeyEvent(e) {
 }
 
 document.addEventListener("keydown", (e) => {
+  if (currentMode !== "performance") return;
+  if (isMuted) return;
   if (e.target.closest("input, textarea, select, [contenteditable=true]")) return;
-  if (heldKeys.has(e.code)) return;  // 既に押されている
+  if (heldKeys.has(e.code)) return;
 
   const paramIndex = chordFromKeyEvent(e);
   if (paramIndex === null) return;
@@ -347,20 +791,106 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("keyup", (e) => {
+  if (currentMode !== "performance") return;
   const paramIndex = heldKeys.get(e.code);
   if (paramIndex === undefined) return;
   heldKeys.delete(e.code);
   stopChord(paramIndex);
 });
 
-// Resume AudioContext on click
-document.body.addEventListener("click", resumeAudioIfNeeded);
+// -------------------------------------------------------
+// Settings panel
+// -------------------------------------------------------
+const gearBtn = document.getElementById("gearBtn");
+const settingsOverlay = document.getElementById("settingsOverlay");
+const settingsPanel = document.getElementById("settingsPanel");
+
+gearBtn.addEventListener("click", () => {
+  const isOpen = settingsOverlay.classList.toggle("open");
+  gearBtn.classList.toggle("open", isOpen);
+  if (isOpen) renderSettings();
+});
+
+settingsOverlay.addEventListener("click", (e) => {
+  if (e.target === settingsOverlay) {
+    settingsOverlay.classList.remove("open");
+    gearBtn.classList.remove("open");
+  }
+});
+
+// Speed pills
+const speedPills = document.querySelectorAll(".speed-pill");
+speedPills.forEach(pill => {
+  pill.addEventListener("click", () => {
+    speedPills.forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    markov.speed = pill.dataset.speed;
+  });
+});
+
+function getTargetName(baseRoot, interval, quality) {
+  const target = (baseRoot + interval) % 12;
+  return markov.notes[target] + (quality === "maj" ? " Major" : " Minor");
+}
+
+function renderSettings() {
+  renderRuleSection("majorRules", markov.majorRule, true);
+  renderRuleSection("minorRules", markov.minorRule, false);
+
+  speedPills.forEach(p => {
+    p.classList.toggle("active", p.dataset.speed === markov.speed);
+  });
+}
+
+function renderRuleSection(containerId, rules, isMajor) {
+  const container = document.getElementById(containerId);
+  const probs = markov.computeProbabilities(rules);
+  container.innerHTML = "";
+
+  rules.forEach((rule, idx) => {
+    const name = getTargetName(0, rule.interval, rule.quality);
+    const prob = probs[idx].toFixed(1);
+
+    const row = document.createElement("div");
+    row.className = "rule-row";
+
+    const nameEl = document.createElement("span");
+    nameEl.className = "rule-name";
+    nameEl.textContent = name;
+
+    const probEl = document.createElement("span");
+    probEl.className = "rule-prob";
+    probEl.textContent = prob + "%";
+
+    const select = document.createElement("select");
+    select.className = "level-select level-" + rule.level.toLowerCase();
+    ["High", "Middle", "Low", "Special"].forEach(lv => {
+      const opt = document.createElement("option");
+      opt.value = lv;
+      opt.textContent = lv;
+      if (lv === rule.level) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener("change", () => {
+      rule.level = select.value;
+      select.className = "level-select level-" + select.value.toLowerCase();
+      renderRuleSection(containerId, rules, isMajor);
+    });
+
+    row.appendChild(nameEl);
+    row.appendChild(probEl);
+    row.appendChild(select);
+    container.appendChild(row);
+  });
+}
 
 // -------------------------------------------------------
-// 起動（RNBO パッチ不要・正しい音程で即演奏可能）
+// Initialize: Auto mode starts immediately
 // -------------------------------------------------------
 function initApp() {
   document.getElementById("setup").classList.add("hidden");
+  startAutoMode();
 }
 
 initApp();
