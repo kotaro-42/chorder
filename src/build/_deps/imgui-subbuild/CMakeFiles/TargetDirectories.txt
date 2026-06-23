@@ -1,3 +1,0 @@
-/Users/kotarosato/Desktop/data/5 RASM C++/src/build/_deps/imgui-subbuild/CMakeFiles/imgui-populate.dir
-/Users/kotarosato/Desktop/data/5 RASM C++/src/build/_deps/imgui-subbuild/CMakeFiles/edit_cache.dir
-/Users/kotarosato/Desktop/data/5 RASM C++/src/build/_deps/imgui-subbuild/CMakeFiles/rebuild_cache.dir
