@@ -91,12 +91,6 @@
     border-color: #111111;
   }
 
-  /* ---- Setup panel (hidden) ---- */
-  #setup { display: none; }
-
-  /* ---- Status badge (hidden) ---- */
-  #status { display: none; }
-
   /* ---- Gear button ---- */
   .gear-btn {
     position: absolute;
@@ -308,9 +302,7 @@
     border-color: #66bb6a;
     transform: scale(.97);
   }
-  .chord-btn:disabled { opacity: .35; cursor: default; }
-
-  .chord-btn:hover:not(:disabled) { background: #e0e0e0; }
+  .chord-btn:hover { background: #e0e0e0; }
 
   @media (max-width: 400px) {
     .chord-btn { font-size: .78rem; padding: 9px 2px; }
@@ -362,9 +354,6 @@
   <button class="mute-btn" id="muteBtn">OFF</button>
 </div>
 
-<p id="status"></p>
-<div id="setup" class="hidden" aria-hidden="true"></div>
-
 <!-- Chord grid -->
 <div class="grid-wrap">
   <div class="col-headers">
@@ -392,18 +381,18 @@ const PARAM_MIDI = [
 ];
 
 const CHORDS = [
-  { key: "C",  majIndex: 0,  minIndex: 1,  majLabel: "C",  minLabel: "Cm",  majKey: "1", minKey: "!" },
-  { key: "D♭", majIndex: 2,  minIndex: 3,  majLabel: "D♭", minLabel: "D♭m", majKey: "2", minKey: "@" },
-  { key: "D",  majIndex: 4,  minIndex: 5,  majLabel: "D",  minLabel: "Dm",  majKey: "3", minKey: "#" },
-  { key: "E♭", majIndex: 6,  minIndex: 7,  majLabel: "E♭", minLabel: "E♭m", majKey: "4", minKey: "$" },
-  { key: "E",  majIndex: 8,  minIndex: 9,  majLabel: "E",  minLabel: "Em",  majKey: "5", minKey: "%" },
-  { key: "F",  majIndex: 10, minIndex: 11, majLabel: "F",  minLabel: "Fm",  majKey: "6", minKey: "^" },
-  { key: "G♭", majIndex: 12, minIndex: 13, majLabel: "G♭", minLabel: "G♭m", majKey: "7", minKey: "&" },
-  { key: "G",  majIndex: 14, minIndex: 15, majLabel: "G",  minLabel: "Gm",  majKey: "8", minKey: "*" },
-  { key: "A♭", majIndex: 16, minIndex: 17, majLabel: "A♭", minLabel: "A♭m", majKey: "9", minKey: "(" },
-  { key: "A",  majIndex: 18, minIndex: 19, majLabel: "A",  minLabel: "Am",  majKey: "0", minKey: ")" },
-  { key: "B♭", majIndex: 20, minIndex: 21, majLabel: "B♭", minLabel: "B♭m", majKey: "-", minKey: "_" },
-  { key: "B",  majIndex: 22, minIndex: 23, majLabel: "B",  minLabel: "Bm",  majKey: "=", minKey: "+" },
+  { majIndex: 0,  minIndex: 1,  majLabel: "C",  minLabel: "Cm",  majKey: "1" },
+  { majIndex: 2,  minIndex: 3,  majLabel: "D♭", minLabel: "D♭m", majKey: "2" },
+  { majIndex: 4,  minIndex: 5,  majLabel: "D",  minLabel: "Dm",  majKey: "3" },
+  { majIndex: 6,  minIndex: 7,  majLabel: "E♭", minLabel: "E♭m", majKey: "4" },
+  { majIndex: 8,  minIndex: 9,  majLabel: "E",  minLabel: "Em",  majKey: "5" },
+  { majIndex: 10, minIndex: 11, majLabel: "F",  minLabel: "Fm",  majKey: "6" },
+  { majIndex: 12, minIndex: 13, majLabel: "G♭", minLabel: "G♭m", majKey: "7" },
+  { majIndex: 14, minIndex: 15, majLabel: "G",  minLabel: "Gm",  majKey: "8" },
+  { majIndex: 16, minIndex: 17, majLabel: "A♭", minLabel: "A♭m", majKey: "9" },
+  { majIndex: 18, minIndex: 19, majLabel: "A",  minLabel: "Am",  majKey: "0" },
+  { majIndex: 20, minIndex: 21, majLabel: "B♭", minLabel: "B♭m", majKey: "-" },
+  { majIndex: 22, minIndex: 23, majLabel: "B",  minLabel: "Bm",  majKey: "=" },
 ];
 
 const majKeyIndex = new Map(MAJ_KEYS.map((k, i) => [k, i]));
@@ -510,10 +499,6 @@ class MarkovEngine {
     const idx = Math.floor(Math.random() * this.baseTimeChoices.length);
     const multiplier = this.speedConfig[this.speed === "lo" ? "lo" : this.speed === "hi" ? "hi" : "mid"];
     return this.baseTimeChoices[idx] * multiplier;
-  }
-
-  currentChordName() {
-    return this.notes[this.current.root] + (this.current.quality === "maj" ? " Major" : " Minor");
   }
 
   currentParamIndex() {
@@ -803,7 +788,6 @@ document.addEventListener("keyup", (e) => {
 // -------------------------------------------------------
 const gearBtn = document.getElementById("gearBtn");
 const settingsOverlay = document.getElementById("settingsOverlay");
-const settingsPanel = document.getElementById("settingsPanel");
 
 gearBtn.addEventListener("click", () => {
   const isOpen = settingsOverlay.classList.toggle("open");
@@ -834,15 +818,15 @@ function getTargetName(baseRoot, interval, quality) {
 }
 
 function renderSettings() {
-  renderRuleSection("majorRules", markov.majorRule, true);
-  renderRuleSection("minorRules", markov.minorRule, false);
+  renderRuleSection("majorRules", markov.majorRule);
+  renderRuleSection("minorRules", markov.minorRule);
 
   speedPills.forEach(p => {
     p.classList.toggle("active", p.dataset.speed === markov.speed);
   });
 }
 
-function renderRuleSection(containerId, rules, isMajor) {
+function renderRuleSection(containerId, rules) {
   const container = document.getElementById(containerId);
   const probs = markov.computeProbabilities(rules);
   container.innerHTML = "";
@@ -875,7 +859,7 @@ function renderRuleSection(containerId, rules, isMajor) {
     select.addEventListener("change", () => {
       rule.level = select.value;
       select.className = "level-select level-" + select.value.toLowerCase();
-      renderRuleSection(containerId, rules, isMajor);
+      renderRuleSection(containerId, rules);
     });
 
     row.appendChild(nameEl);
@@ -885,15 +869,7 @@ function renderRuleSection(containerId, rules, isMajor) {
   });
 }
 
-// -------------------------------------------------------
-// Initialize: Auto mode starts immediately
-// -------------------------------------------------------
-function initApp() {
-  document.getElementById("setup").classList.add("hidden");
-  startAutoMode();
-}
-
-initApp();
+startAutoMode();
 </script>
 </body>
 </html>
